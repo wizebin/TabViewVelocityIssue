@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, ScrollView, Text, SafeAreaView } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const FirstRoute = () => (
   <View style={[styles.scene, { backgroundColor: '#ff4081' }]}>
@@ -42,22 +43,37 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <TabView
-        navigationState={this.state}
-        renderScene={SceneMap({
-          first: FirstRoute,
-          second: SecondRoute,
-          third: ThirdRoute,
-        })}
-        onIndexChange={index => this.setState({ index })}
-        initialLayout={{ width: Dimensions.get('window').width }}
-      />
+      <SafeAreaView style={styles.container}>
+        <TabView
+          style={styles.tabView}
+          navigationState={this.state}
+          renderScene={SceneMap({
+            first: FirstRoute,
+            second: SecondRoute,
+            third: ThirdRoute,
+          })}
+          onIndexChange={index => this.setState({ index })}
+          initialLayout={{ width: Dimensions.get('window').width }}
+        />
+        <View>
+          <TouchableOpacity style={styles.tab1Button} onPress={() => {this.setState({ index: 0 })}}><Text>Programmatically move to tab 1</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.tab2Button} onPress={() => {this.setState({ index: 1 })}}><Text>Programmatically move to tab 2</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.tab3Button} onPress={() => {this.setState({ index: 2 })}}><Text>Programmatically move to tab 3</Text></TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 }
 
+const baseTabButtonStyle = {
+  padding: 10,
+  margin: 5,
+  borderRadius: 6,
+};
+
 const styles = StyleSheet.create({
-  scene: {
+  container: {
+    flexDirection: 'column',
     flex: 1,
   },
   nameCard: {
@@ -67,5 +83,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 10,
+  },
+  scene: {
+    flex: 1,
+  },
+  tabView: {
+    flex: 1,
+  },
+  tab1Button: {
+    ...baseTabButtonStyle,
+    backgroundColor: '#ff4081'
+  },
+  tab2Button: {
+    ...baseTabButtonStyle,
+    backgroundColor: '#673ab7'
+  },
+  tab3Button: {
+    ...baseTabButtonStyle,
+    backgroundColor: '#00a8ff'
   },
 });
